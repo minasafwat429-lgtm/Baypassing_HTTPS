@@ -1,47 +1,35 @@
-<div align="center">
-  <h1>🛡️ HTTP Packet Injector</h1>
-  <p><strong>Advanced HTTP Traffic Manipulation & Packet Injection Tool</strong></p>
-  
-  [![Python Version](https://img.shields.io/badge/python-3.8+-blue.svg)](https://python.org)
-  [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
-  [![Platform](https://img.shields.io/badge/platform-Linux-red.svg)](https://linux.org)
-  [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
-</div>
+# Packet Injector - HTTP Injection Tool
 
-## ⚠️ Legal Disclaimer
+Advanced tool for injecting code into HTTP packets using Man-in-the-Middle (MITM) technique via NetfilterQueue.
 
-> **IMPORTANT:** This tool is for **educational purposes only**. Use only on networks you own or have explicit written permission to test. Unauthorized interception of network traffic is illegal in most jurisdictions. The authors assume no liability for misuse.
+## ⚠️ Disclaimer
+
+This tool is for educational purposes only. Using it on networks without explicit permission is illegal. The user assumes full responsibility.
 
 ## 🎯 Features
 
-- 🔍 **Real-time HTTP Traffic Interception**
-- 💉 **JavaScript Code Injection** into HTML responses
-- 📊 **Automatic Content-Length Recalculation**
-- 🔄 **HTTP Version Downgrade** (2.0/1.1 → 1.0)
-- 🚫 **Remove Compression Headers** for better injection
-- 🎯 **Port-specific Filtering** (Customizable)
-- 🛡️ **Error Handling & Recovery**
-- 📝 **Detailed Logging System**
+- Intercept and modify HTTP packets in real-time
+- Remove `Accept-Encoding` from requests for better readability
+- Upgrade `HTTP/1.1` to `HTTP/1.0` to prevent compression
+- Inject JavaScript code into HTML pages
+- Automatically recalculate content length
+- Process both requests and responses on port 8080
 
-## 📋 Prerequisites
+## 📋 Requirements
 
-- **Operating System:** Linux (Kali, Ubuntu, Debian)
-- **Python Version:** 3.8 or higher
-- **Root Privileges:** Required for packet manipulation
-- **Network:** Target network access
+- Linux (with NetfilterQueue support)
+- Python 3.6+
+- Root privileges
 
-## 🚀 Quick Installation
-
-### Method 1: Direct Installation
+## 🔧 Installation
 
 ```bash
-# Clone the repository
-git clone https://github.com/YOUR_USERNAME/HTTP-Packet-Injector.git
-cd HTTP-Packet-Injector
+# Install required packages
+pip install -r requirements.txt
 
-# Run installation script
-chmod +x scripts/setup.sh
-sudo ./scripts/setup.sh
+# Install NetfilterQueue dependencies (for Linux)
+sudo apt-get install build-essential python3-dev libnetfilter-queue-dev
 
-bash
-# Build Docker image
+# Reinstall NetfilterQueue properly
+pip uninstall netfilterqueue
+pip install --no-cache-dir netfilterqueue
