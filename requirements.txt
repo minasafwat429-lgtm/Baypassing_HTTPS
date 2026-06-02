@@ -1,0 +1,19 @@
+# Core dependencies for packet injection tool
+
+# Packet manipulation and network analysis
+scapy>=2.4.5
+
+# NetfilterQueue for iptables NFQUEUE integration
+netfilterqueue>=0.9.0
+
+# Optional: For better performance and stability
+# pycryptodome>=3.15.0
+
+# Note: On Linux systems, you also need:
+# libnetfilter-queue-dev (system package)
+# build-essential (system package)
+# python3-dev (system package)
+
+# Installation guide:
+# sudo apt-get install build-essential python3-dev libnetfilter-queue-dev
+# pip install --no-cache-dir netfilterqueue
